@@ -139,7 +139,7 @@ public class JWTVotesEndpoint extends AssignmentEndpoint {
             return trackProgress(failed().feedback("jwt-invalid-token").build());
         } else {
             try {
-                Jwt jwt = Jwts.parser().setSigningKey(JWT_PASSWORD).parse(accessToken);
+                Jwt jwt = Jwts.parser().setSigningKey(JWT_PASSWORD).parseClaimsJws(accessToken);
                 Claims claims = (Claims) jwt.getBody();
                 boolean isAdmin = Boolean.valueOf((String) claims.get("admin"));
                 if (!isAdmin) {
@@ -148,7 +148,7 @@ public class JWTVotesEndpoint extends AssignmentEndpoint {
                     votes.values().forEach(vote -> vote.reset());
                     return trackProgress(success().build());
                 }
-            } catch (JwtException e) {
+            } catch (Exception e) {
                 return trackProgress(failed().feedback("jwt-invalid-token").output(e.toString()).build());
             }
         }

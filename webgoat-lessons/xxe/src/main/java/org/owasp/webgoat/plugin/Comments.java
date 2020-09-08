@@ -63,11 +63,8 @@ public class Comments {
         JAXBContext jc = JAXBContext.newInstance(Comment.class);
 
         XMLInputFactory xif = XMLInputFactory.newFactory();
-        xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, true);
-        xif.setProperty(XMLInputFactory.IS_VALIDATING, false);
-
-        xif.setProperty(XMLInputFactory.SUPPORT_DTD, true);
-        XMLStreamReader xsr = xif.createXMLStreamReader(new StringReader(xml));
+        xif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+            XMLStreamReader xsr = xif.createXMLStreamReader(new StringReader(xml));
 
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         return (Comment) unmarshaller.unmarshal(xsr);

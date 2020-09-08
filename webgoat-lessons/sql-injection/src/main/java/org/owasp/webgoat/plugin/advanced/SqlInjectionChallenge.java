@@ -46,9 +46,11 @@ public class SqlInjectionChallenge extends AssignmentEndpoint {
             Connection connection = DatabaseUtilities.getConnection(webSession);
             checkDatabase(connection);
 
-            String checkUserQuery = "select userid from " + USERS_TABLE_NAME + " where userid = '" + username_reg + "'";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(checkUserQuery);
+            String checkUserQuery = "select userid from " + USERS_TABLE_NAME + " where userid = ?";
+
+            PreparedStatement statement = connection.prepareStatement(checkUserQuery);
+            statement.setString(1,username_reg);
+            ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 attackResult = failed().feedback("user.exists").feedbackArgs(username_reg).build();

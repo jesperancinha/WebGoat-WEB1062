@@ -89,7 +89,8 @@ public class StoredXssComments extends AssignmentEndpoint {
     @ResponseBody
     public AttackResult createNewComment (@RequestBody String commentStr)  throws IOException {
 
-        Comment comment = parseJson(commentStr);
+        Comment comment =parseJson(commentStr);
+        comment.setText(Encode.forHtml(comment.getText()));
 
         EvictingQueue<Comment> comments = userComments.getOrDefault(webSession.getUserName(), EvictingQueue.create(100));
         comment.setDateTime(DateTime.now().toString(fmt));
